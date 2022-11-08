@@ -6,13 +6,13 @@
 
     <groupId>be.zorgi</groupId>
     <artifactId>X509Authentication</artifactId>
-    <version>1.0</version>
+    <version>19.0.2</version>
     <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <version.keycloak>6.0.1</version.keycloak>
+        <version.keycloak>19.0.2</version.keycloak>
         <jboss.logging.version>3.4.1.Final</jboss.logging.version>
     </properties>
 
@@ -55,6 +55,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}_${project.version}</finalName>
     </build>
 </project>

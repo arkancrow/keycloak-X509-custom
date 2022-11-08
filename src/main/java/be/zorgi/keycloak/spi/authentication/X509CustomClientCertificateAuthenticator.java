@@ -57,7 +57,7 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
 
             // Validate X509 client certificate
             try {
-                CertificateValidator.CertificateValidatorBuilder builder = certificateValidationParameters(config);
+                CertificateValidator.CertificateValidatorBuilder builder = certificateValidationParameters(context.getSession(), config);
                 CertificateValidator validator = builder.build(certs);
                 validator.checkRevocationStatus()
                         .validateKeyUsage()
@@ -104,19 +104,16 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
             //If the user is not found, add it to the user repository
             if(user == null) {
                 KeycloakSession keycloakSession = context.getSession();
-                UserProvider userProvider = keycloakSession.userStorageManager();
+                UserProvider userProvider = keycloakSession.users();
                 RealmModel realmModel = context.getRealm();
                 user = userProvider.addUser(realmModel, serialNumber.toString());
-                Set<String> emptySet = Collections.emptySet();
                 UserRepresentation rep = new UserRepresentation();
                 rep.setUsername(serialNumber.toString());
                 rep.setFirstName(givenName.toString());
                 rep.setLastName(surName.toString());
                 rep.setEnabled(true);
                 logger.debug("[X509CustomClientCertificateAuthenticator:authenticate] create user model : " + user.toString());
-                UserResource.updateUserFromRep(user, rep, emptySet, realmModel, keycloakSession, false);
-
-
+                UserResource.updateUserFromRep(null, user, rep, keycloakSession, false);
                 user = getUserIdentityToModelMapper(config).find(context, serialNumber);
             }
 

@@ -217,10 +217,10 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
 
     private void dumpContainerAttributes(AuthenticationFlowContext context) {
 
-        Enumeration<String> attributeNames = context.getHttpRequest().getAttributeNames();
-        while(attributeNames.hasMoreElements()) {
-            String a = attributeNames.nextElement();
-            logger.tracef("[X509CustomClientCertificateAuthenticator:dumpContainerAttributes] \"%s\"", a);
+        Map<String, Object> attributeNames = context.getSession().getAttributes();
+
+        for (String name : attributeNames.keySet()) {
+            logger.tracef("[X509ClientCertificateAuthenticator:dumpContainerAttributes] \"%s\"", name);
         }
     }
 

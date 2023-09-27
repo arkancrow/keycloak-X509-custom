@@ -39,8 +39,13 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
                 // No x509 client cert, fall through and
                 // continue processing the rest of the authentication flow
                 logger.info("[X509CustomClientCertificateAuthenticator:authenticate] x509 client certificate is not available for mutual SSL.");
-                context.challenge(createInfoResponse(context, "x509 client certificate is not available for mutual SSL."));
+//                context.challenge(createInfoResponse(context, "x509 client certificate is not available for mutual SSL."));
+//                context.attempted();
+
+                String errorMessage = "Certificate validation's failed.";
+                context.challenge(createResponseNoCertificate(context, errorMessage));
                 context.attempted();
+
                 return;
             }
 
@@ -103,6 +108,7 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
 
             //If the user is not found, add it to the user repository
             if(user == null) {
+                logger.debug("User not found, creating a new one.");
                 KeycloakSession keycloakSession = context.getSession();
                 UserProvider userProvider = keycloakSession.users();
                 RealmModel realmModel = context.getRealm();
@@ -212,6 +218,18 @@ public class X509CustomClientCertificateAuthenticator extends AbstractX509Client
 
         form.setFormData(formData);
 
+        return form.createX509ConfirmPage();
+    }
+
+    private Response createResponseNoCertificate(AuthenticationFlowContext context, String errorMessage) {
+
+        LoginFormsProvider form = context.form();
+        if (errorMessage != null && errorMessage.trim().length() > 0) {
+            List<FormMessage> errors = new LinkedList<>();
+
+            errors.add(new FormMessage(errorMessage));
+            form.setErrors(errors);
+        }
         return form.createX509ConfirmPage();
     }
 

@@ -12,6 +12,7 @@ public class X509CustomClientCertificateAuthenticatorFactory extends AbstractX50
             new X509CustomClientCertificateAuthenticator();
 
     public static final AuthenticationExecutionModel.Requirement[] REQUIREMENT_CHOICES = {
+            AuthenticationExecutionModel.Requirement.REQUIRED,
             AuthenticationExecutionModel.Requirement.ALTERNATIVE,
             AuthenticationExecutionModel.Requirement.DISABLED
     };
